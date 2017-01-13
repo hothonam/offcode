@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>student.html</title>
+    <!-- bootstrap css로딩하기 -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/custom.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+	  	<script src="js/html5shiv.js"></script>
+		<script src="js/respond.min.js"></script>
+	<![endif]-->
+
+	<!-- 코드하이라이팅 제작...대기중 -->
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/default.min.css">
+    <!-- <link rel="stylesheet" type="text/css" href="highlight/styles/darkula.css"> -->
+</head>
+
+<body>
+    <div id="wrap">
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">OffCode</a>
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="/">Home</a></li>
+                        <li class="active"><a href="student.html">Student</a></li>
+                        <li><a href="teacher.html">Teacher</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <!-- Tab 메뉴 -->
+            <ul class="nav nav-tabs" id="myTab">
+                <li class="active">
+                    <a id="clipTab" href="#ClipBoard" data-toggle="tab">ClipBoard <span id="clipBadge" class="badge"></span></a>
+                </li>
+                <li>
+                    <a id="fileTab" href="#FileList" data-toggle="tab">FileList <span id="fileBadge" class="badge"></span></a>
+                </li>
+                <li>
+                    <a id="chattingTab" href="#chatting" data-toggle="tab">Chatting <span id="chattingBadge" class="badge"></span></a>
+                </li>
+            </ul>
+            <!-- 탭컨텐츠 -->
+            <div class="tab-content">
+                <div class="tab-pane active" id="ClipBoard">
+                    <br/>
+                    <form class="form-horizontal" role="form">
+                        <label for="fontSize" class="col-xs-2">Font-Size</label>
+                        <div class="col-xs-1">
+                            <select id="fontSize" class="selectpicker">
+                                <option>12</option>
+                                <option>13</option>
+                                <option selected="selected">14</option>
+                                <option>15</option>
+                                <option>16</option>
+                                <option>17</option>
+                                <option>18</option>
+                                <option>19</option>
+                                <option>20</option>
+                            </select>
+                        </div>
+                    </form>
+                    <div class="clearfix"></div>
+                    <pre class="prettyprint well"><code></code></pre>
+                    <div class="row text-center">
+                        <div class="btn-group">
+                            <button class="btn btn-default" id="before">
+                                <span class="glyphicon glyphicon-chevron-left"></span>
+                            </button>
+                            <button class="btn btn-default"><strong id="pageSpan">0</strong></button>
+                            <button class="btn btn-default" id="after">
+                                <span class="glyphicon glyphicon-chevron-right"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <button class="btn btn-default btn-block" id="copyBtn">
+                                <span class="glyphicon glyphicon-log-in"></span> <span class="hidden-xs">Copy</span>
+                            </button>
+                        </div>
+                        <div class="col-xs-3">
+                            <button class="btn btn-warning btn-block" id="clearBtn">
+                                <span class="glyphicon glyphicon-remove"></span> <span class="hidden-xs">Clear</span>
+                            </button>
+                        </div>
+                        <div class="col-xs-3">
+                            <button class="btn btn-success btn-block" id="reloadBtn">
+                                <span class="glyphicon glyphicon-repeat"></span> <span class="hidden-xs">Reload</span>
+                            </button>
+                        </div>
+                        <div class="col-xs-3">
+                            <button class="btn btn-danger btn-block" id="delHistoryBtn">
+                                <span class="glyphicon glyphicon-trash"></span> <span class="hidden-xs">RemoveAll</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- #ClipBoard -->
+                <!-- 업록드 파일 목록 -->
+                <div class="tab-pane" id="FileList">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <table class="table table-striped ">
+                                <thead>
+                                    <tr>
+                                        <th>파일아이디</th>
+                                        <th>파일명</th>
+                                        <th>설명</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="fileBody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- #FileList -->
+                <!-- 쳇팅 창-->
+                <div class="tab-pane" id="chatting">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="commentArea">
+                                <div class="overwrap">
+                                    <div class="input-group">
+                                        <input id="chatName" type="text" class="form-control" placeholder="대화명 입력..." />
+                                        <span class="input-group-btn">
+								        <button id="enterBtn" class="btn btn-default" type="button">Enter</button>
+								    </span>
+                                    </div>
+                                    <!-- /input-group -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="msgControl">
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <input id="inputMsg" type="text" class="form-control" placeholder="메세지 입력..." />
+                                <span class="input-group-btn">
+						        <button id="sendBtn" class="btn btn-default" type="button">Send</button>
+						    </span>
+                            </div>
+                            <!-- /input-group -->
+                        </div>
+                    </div>
+                </div>
+                <!-- #chatting -->
+            </div>
+            <!-- tab-content -->
+        </div>
+        <!-- container -->
+        <!-- 링크 모달 다이얼로그 -->
+        <div id="linkModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h3>링크를 클릭하세요</h3>
+                    </div>
+                    <div class="modal-body">
+                        <a href="" id="modalLink" target="_blank"></a>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#" class="btn btn-success" data-dismiss="modal">취소</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 히스토리 삭제 모달 다이얼로그 -->
+        <div id="confirmModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h3>알림</h3>
+                    </div>
+                    <div class="modal-body">
+                        <p id="confirmMsg">One fine body…</p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#" class="btn btn-success" data-dismiss="modal">아니요</a>
+                        <button class="btn btn-danger" data-dismiss="modal" id="clearHistoryBtn">네</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 작업중 -->
+        <!-- !!!!!!!-->
+        <!-- 이미지 슬라이더 모달 -->
+        <div id="imgModal" class="modal fade" tabindex="-1" role="">
+            
+        </div>
+    </div>
+    <!-- #wrap -->
+    <script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <!-- 코드하이라이트 -->
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/default.min.css">
+    <script src="highlight/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="js/jquery.zclip.js"></script>
+    <script src="js/socket.io.js"></script>
+    <script type="text/javascript" src="js/underscore.js"></script>
+    <script type="text/javascript">
+    //1. node js 서버에 웹소켓 접속하기 
+    var socket = io.connect(window.location.hostname+':8000');
+    // var socket = io.connect();
+    //도착한 코드의 숫자와 파일 업로드 숫자 
+    var clipCount = 0;
+    var fileCount = 0;
+    var isFileTab = false;
+
+    //현재페이지 
+    var currentPage = 0;
+    if (localStorage) {
+        if (localStorage.seq == undefined) {
+            localStorage.seq = 0;
+        }
+    }
+
+    function printCode(data){
+    	//$(".prettyprint").removeClass("prettyprinted");
+		//$("pre > code").html(data.msg);
+		$("pre > code").text(data.msg);
+        $("code").text(data.msg);
+    }
+
+    //서버가 발생 시키는 이벤트
+    socket.on("getMessage", function(data) {
+        console.log(data);
+        // 1. 코드전송 처리 부분
+        if (data.type == 'code') {
+            
+            clipCount++;
+            $("#clipBadge").text(clipCount);
+
+            // 다음에 정리할 부분!!!! 
+            var escapedData = _.escape(data);
+            //printCode(data);
+            $("pre > code").text(data.msg);
+            hljs.highlightBlock($('pre > code')[0]);
+            //hljs.highlightBlock(document.querySelector('pre > code'));// 윗 줄과 같은의미
+
+            //로칼 스토리지에 저장하기
+            localStorage.seq++;
+            var page = localStorage.seq; //저장할 페이지 
+            var database;
+            if (localStorage.codeHistory == undefined) {
+                database = {};
+            } else {
+                database = JSON.parse(localStorage.codeHistory);
+            }
+            //database[page] = escapedData; //{ 1:"code", 2: "code"};
+            database[page] = data.msg; //{ 1:"code", 2: "code"};
+            localStorage.codeHistory = JSON.stringify(database);
+            currentPage = localStorage.seq;
+            $("#pageSpan").text(currentPage);
+        }
+        //2. 링크전송 처리부분
+        else if (data.type == 'url' && data.msg != null) {
+  			// 링크주소에 http:// 확인
+            if(!/^http([s]?):\/\/.*/.test(data.msg)){
+            	data.msg = "http://" + data.msg;
+            }
+            $("#modalLink").attr("href", data.msg).text(data.msg);
+            $("#linkModal").modal();
+        }
+        //3. 파일다운로
+        else if(data.type =='file'){
+            //파일목록 생성
+            console.log(data);
+            var id=data.path;
+            var orgFileName=data.originalname;
+            var title=data.title;
+            var a = $("<a/>")
+            .attr("href",id)
+            .attr('download',orgFileName)
+            .text(orgFileName);
+            var td1=$("<td/>").text(1);
+            var td2=$("<td/>").html(a);
+            var td3=$("<td/>").text(title);
+            $("<tr/>").append(td1).append(td2).append(td3).appendTo("#fileBody");
+        }
+    });
+    //코드 브라우징을 위한 페이지이동함수
+    $("#after").click(function(event) {
+    	currentPage++;
+		if(currentPage>localStorage.seq){
+			alert("다음 페이지는 없습니다.");
+			currentPage--;
+			return;
+		}
+		var database=JSON.parse(localStorage.codeHistory);
+		var data = database[currentPage];
+		console.log(data);
+		$("pre > code").text(data);
+        hljs.highlightBlock($('pre > code')[0]);
+		$("#pageSpan").text(currentPage);
+    });
+    $("#before").click(function(event) {
+    	currentPage--;
+		if(currentPage<=0){
+			alert("이전 페이지는 없습니다.");
+			currentPage++;
+			return;
+		}
+		var database=JSON.parse(localStorage.codeHistory);
+		var data = database[currentPage];
+		$("pre > code").text(data);
+        hljs.highlightBlock($('pre > code')[0]);
+		$("#pageSpan").text(currentPage);
+    });
+  
+    //파일 업로드 이벤트 
+    socket.on("newFile",function(){ 
+        if(!isFileTab){
+            fileCount++;
+            $("#fileBadge").text(fileCount);
+        }
+        //새로운 파일 목록을 달라고 이벤트 발생 시키기 
+        socket.emit("getFileList");
+    });
+    socket.on("fileupReset",function(){
+        $("#fileBody tr").remove();
+    });
+    $(document).on("click","#alink", function(){
+        $(this).detach();
+    });
+    
+
+    //페이지 로드가 완료 가 시작되면 시작할 코드
+    $(document).ready(function() {
+        //클립보드 복사 기능 세팅 및 초기화 코드
+        $("#copyBtn").zclip({
+            path: "js/ZeroClipboard.swf",
+            copy: function() {
+                $("#clipBadge").text("");
+                clipCount = 0;
+                return $(".prettyprint").text();
+            }
+        });
+        //버튼이벤트관련모
+        $("#clearBtn").click(function() {
+            $(".prettyprint").html("");
+        });
+        $("#reloadBtn").click(function() {
+            socket.emit("getCurrentCode");
+        });
+        $("#delHistoryBtn").click(function() {
+            $("#confirmMsg").text("히스토리를 삭제하시겠습니까?");
+            $("#confirmModal").modal();
+        });
+        $("#clearHistoryBtn").click(function() {
+            delete localStorage.codeHistory;
+            delete localStorage.seq;
+            localStorage.seq = 0;
+            $("#pageSpan").text(0);
+            $(".prettyprint").html("");
+            $("#clipBadge").text("");// 클립뱃지 초기화? 적당한 필요시기 인지 재확인필요
+            clipCount=0;
+        });
+        $(".prettyprint").click(function(){
+			$("#clipBadge").text("");
+			clipCount=0;
+		});
+		$("#fileTab").click(function(){
+			isFileTab=true;
+			fileCount=0;
+			$("#fileBadge").text("");
+		});
+		$("#clipTab").click(function(){
+			isFileTab=false;
+            $("#clipBadge").text("")
+            clipCount=0;
+		});
+		$("#pageSpan").text(currentPage);
+		$("#fontSize").change(function(){
+			var value=$(this).val();
+			$(".prettyprint").css("font-size",value+"px");
+		});
+    });
+    </script>
+</body>
+
+</html>

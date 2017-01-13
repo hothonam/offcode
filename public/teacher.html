@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<title>teacher.html</title>
+	<!-- bootstrap css로딩하기 -->
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/dropzone.min.css"/>
+	<link rel="stylesheet" href="css/custom.css">
+	</style>
+</head>
+
+<body>
+<div id="wrap">
+<div class="navbar navbar-inverse navbar-fixed-top">
+	<div class="container">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="/">OffCode</a>
+			<button type="button" class="navbar-toggle"
+				data-toggle="collapse"
+				data-target=".navbar-collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+		</div>
+		<div class="navbar-collapse collapse">
+			<ul class="nav navbar-nav">
+	            <li><a href="/">Home</a></li>
+	            <li><a href="student.html">Student</a></li>
+	            <li class="active"><a href="Teacher.html">Teacher</a></li>
+	        </ul>
+		</div>
+	</div>
+</div>
+<div class="container">
+	<!-- Tab 메뉴 -->
+	<ul class="nav nav-tabs" id="myTab">
+	  	<li class="active">
+	  		<a id="clipTab" href="#ClipBoard" data-toggle="tab">ClipBoard <span id="clipBadge" class="badge"></span></a>
+	  	</li>
+	</ul>
+	<div class="tab-content">
+		<div class="tab-pane active" id="ClipBoard">
+			<br/>	
+			<form class="form-horizontal" role="form">
+				<label for="fontSize" class="col-xs-2">Font-Size</label>
+				<div class="col-xs-1">
+					<select id="fontSize" class="selectpicker">
+						<option>12</option>
+						<option>13</option>
+						<option selected="selected">14</option>
+						<option>15</option>
+						<option>16</option>
+						<option>17</option>
+						<option>18</option>
+						<option>19</option>
+						<option>20</option>
+					</select>	
+				</div>	
+			</form>
+			<div class="clearfix"></div>
+			<div class="col-xs-12 ">
+				<form role="form-control">   
+					<textarea class="col-xs-12 prettyprint well " id="Code" rows="10" ></textarea>
+		  		</form>
+			</div>
+			<br/>		
+			<div class="row">
+				<div class="col-xs-3">
+					<button class="btn btn-primary btn-block" id="sendCodeBtn">
+						<span class="glyphicon glyphicon-log-in"></span>
+						<span class="hidden-xs">SendCode</span>
+					</button>
+				</div>
+				<div class="col-xs-3">
+					<button class="btn btn-default btn-block" id="sendUrlBtn">
+						<span class="glyphicon glyphicon-log-in"></span>
+						<span class="hidden-xs">Send-URL</span>
+					</button>
+				</div>
+				<div class="col-xs-3">
+					<button class="btn btn-warning btn-block" onclick="getCurrentCode()">
+						<span class="glyphicon glyphicon-repeat"></span>
+						<span class="hidden-xs">Send-File</span>
+					</button>
+				</div>
+				<div class="col-xs-3">
+					<button class="btn btn-danger btn-block" onclick="deleteHistory()">
+						<span class="glyphicon glyphicon-trash"></span>
+						<span class="hidden-xs">Reset-FileList</span>
+					</button>
+				</div> 
+			</div><!-- row 버튼-->
+			<br/>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+			      <h4 class="panel-title">
+			        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+			          파일업로드
+			        </a>
+			      </h4>
+				</div>
+	    		<div style="background-color:#cecece;" id="collapseOne" class="panel-collapse collapse">
+	      			<div class="panel-body">
+	       				<div class="row" id="uploadForm">
+		       				<form  id="my-dropzone" action="/file-upload" class="dropzone">
+		       					<!-- <div class="fallback">
+		       						<input name="file" type="file" multiple />
+		       					</div> -->
+					       		<input placeholder="파일 설명" type="text" name="title" id="fileTitle"/>
+								<button id="clearButton" style="margin-right:10px;">Clear</button>
+								<br/>
+							</form>
+						</div>
+	      			</div>
+	    		</div><!-- #collapseOne -->
+			</div><!-- .panel -->
+		</div>	
+	</div>	
+</div>
+</div> <!-- #wrap -->
+
+<!-- jquery 로딩하기  -->
+<script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<!-- 1. socket.io 클라이언트 javascript 로딩 / 브라우저의 Sources 에서 확인 할 수있음 -->
+<!-- <script src="/socket.io/socket.io.js"></script> -->
+<script src="js/socket.io.js"></script>
+<script src="js/dropzone.js"></script>
+<script type="text/javascript">
+	//1. node js 서버에 웹소켓 접속하기 
+	var socket = io.connect(window.location.hostname+':8000');
+	 // var socket = io.connect();
+	//전송 버튼을 눌렀을때 실행할 함수 등록
+	$("#sendCodeBtn").click(function(event){
+		socket.emit("sendMessage", {type:"code", msg:$("#Code").val()}); 
+	});
+	$("#sendUrlBtn").click(function(event){
+		socket.emit("sendMessage", {type:"url", msg:prompt("URL을 입력하세요")}); 
+	});
+	//클라이언트에서 소스코드를 재요청
+	socket.on("getCurrentCode",function(){
+		socket.emit("sendMessage", {type:"code", msg:$("#Code").val()}); 
+	});
+	function getTimeText(){
+		var date=new Date();
+		return date.getHours()+"시 "+date.getMinutes()+"분 ";
+	};
+
+	var postFileObj;
+	//Dropzone 의 옵션 지정
+	Dropzone.options.myDropzone = {
+	  //초기화 함수 지정 
+	  init: function() {
+		//전송 성공했을때 실행할 함수 
+		this.on("success", function(file, data){
+			socket.emit("fileUploaded",{fileTitle:$("#fileTitle").val()});
+		});
+		myDropzone=this;
+		var clearButton= document.querySelector("#clearButton");
+		//클리어 버튼을 눌렀을때 삭제되도록한다.
+		clearButton.addEventListener("click",function(event){
+			//폼전송 이벤트 막기 
+			event.preventDefault();
+			myDropzone.removeAllFiles();
+			$("#fileTitle").val("");
+		});
+	  }
+	};
+	
+	$(function(){
+		$("#collapseOne").collapse("hide");
+	});	
+</script>
+</body>
+</html>
